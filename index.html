@@ -1,648 +1,545 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-  <meta charset="utf-8">
-  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Adarsh Krishna</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Syne:wght@400;500;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet"/>
+<style>
+/* ─── Reset ─── */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{font-size:16px;scroll-behavior:smooth}
+body{font-family:'Syne',sans-serif;background:#f2efe8;color:#0e0e0e;overflow-x:hidden;cursor:none}
+a{text-decoration:none;color:inherit}
+ul{list-style:none}
 
-  <title>Adarsh Krishna</title>
-  <meta content="" name="description">
-  <meta content="" name="keywords">
+/* ─── Progress Bar ─── */
+#progress{position:fixed;top:0;left:0;height:2px;background:#0e0e0e;width:0%;z-index:9999;transition:width .1s linear}
 
-  <!-- Favicons -->
-  <link href="assets/img/favicon.png" rel="icon">
-  <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon">
+/* ─── Cursor ─── */
+#cur{position:fixed;top:0;left:0;width:10px;height:10px;border-radius:50%;background:#0e0e0e;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:width .25s,height .25s,background .25s;mix-blend-mode:difference}
+#cur-txt{position:fixed;top:0;left:0;pointer-events:none;z-index:9997;transform:translate(-50%,-50%);font-size:.58rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#f2efe8;opacity:0;transition:opacity .2s;white-space:nowrap}
+body.hov-proj #cur{width:72px;height:72px;background:#0e0e0e;border-radius:50%}
+body.hov-proj #cur-txt{opacity:1}
+body.hov-link #cur{width:16px;height:16px}
 
-  <!-- Google Fonts -->
-  <link
-    href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Raleway:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i"
-    rel="stylesheet">
+/* ─── Nav ─── */
+nav{position:fixed;top:0;left:0;right:0;z-index:900;display:flex;align-items:center;justify-content:space-between;padding:1.6rem clamp(1.5rem,5vw,4rem)}
+.nav-logo{font-family:'DM Serif Display',serif;font-size:1.1rem;letter-spacing:.01em;color:#0e0e0e}
+.nav-logo em{font-style:italic;color:#888}
+.nav-links{display:flex;gap:2.5rem}
+.nav-links a{font-size:.72rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#888;transition:color .2s;position:relative}
+.nav-links a::after{content:'';position:absolute;bottom:-3px;left:0;width:0;height:1px;background:#0e0e0e;transition:width .25s}
+.nav-links a:hover{color:#0e0e0e}
+.nav-links a:hover::after{width:100%}
+.nav-right{font-family:'DM Serif Display',serif;font-size:.85rem;font-style:italic;color:#aaa}
+.ham{display:none;flex-direction:column;gap:5px;background:none;border:none;cursor:none}
+.ham span{display:block;width:22px;height:1px;background:#0e0e0e;transition:.3s}
+.mob-nav{position:fixed;inset:0;z-index:850;background:#0e0e0e;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2.5rem;transform:translateY(-100%);transition:transform .5s cubic-bezier(.77,0,.18,1)}
+.mob-nav.open{transform:translateY(0)}
+.mob-nav a{font-family:'DM Serif Display',serif;font-size:2.5rem;font-style:italic;color:#f2efe8}
+@media(max-width:768px){.nav-links,.nav-right{display:none}.ham{display:flex}}
 
-  <!-- Vendor CSS Files -->
-  <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-  <link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
-  <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
-  <link href="assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
-  <link href="assets/vendor/remixicon/remixicon.css" rel="stylesheet">
-  <link href="assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
+/* ─── HERO ─── */
+#hero{min-height:100svh;display:flex;flex-direction:column;justify-content:flex-end;padding:0 clamp(1.5rem,5vw,4rem) clamp(2rem,5vh,4rem);position:relative;overflow:hidden}
 
-  <!-- Template Main CSS File -->
-  <link href="assets/css/style.css" rel="stylesheet">
+/* ── Floating letters — pure CSS, no canvas flicker ── */
+.hero-letters{position:absolute;inset:0;z-index:0;pointer-events:none;user-select:none}
+.hl{position:absolute;font-family:'DM Serif Display',serif;line-height:1;will-change:transform}
+.hl.it{font-style:italic;color:#c0bbb0}
+.hl.ro{font-style:normal;color:#0e0e0e}
+@keyframes fa{0%,100%{transform:translateY(0) translateX(0)}25%{transform:translateY(-18px) translateX(4px)}75%{transform:translateY(10px) translateX(-3px)}}
+@keyframes fb{0%,100%{transform:translateY(0) translateX(0)}30%{transform:translateY(-12px) translateX(-5px)}70%{transform:translateY(16px) translateX(3px)}}
+@keyframes fc{0%,100%{transform:translateY(0) translateX(0)}20%{transform:translateY(14px) translateX(3px)}65%{transform:translateY(-20px) translateX(-4px)}}
+@keyframes fd{0%,100%{transform:translateY(0) translateX(0)}40%{transform:translateY(-16px) translateX(6px)}80%{transform:translateY(8px) translateX(-2px)}}
+@keyframes fe{0%,100%{transform:translateY(0) translateX(0)}35%{transform:translateY(20px) translateX(-4px)}72%{transform:translateY(-10px) translateX(5px)}}
+@keyframes ff{0%,100%{transform:translateY(0) translateX(0)}28%{transform:translateY(-22px) translateX(2px)}60%{transform:translateY(12px) translateX(-6px)}}
+@keyframes fg{0%,100%{transform:translateY(0) translateX(0)}45%{transform:translateY(16px) translateX(4px)}85%{transform:translateY(-14px) translateX(-3px)}}
+@keyframes fh{0%,100%{transform:translateY(0) translateX(0)}22%{transform:translateY(-8px) translateX(-5px)}68%{transform:translateY(18px) translateX(4px)}}
+@keyframes fi{0%,100%{transform:translateY(0) translateX(0)}50%{transform:translateY(-20px) translateX(3px)}78%{transform:translateY(6px) translateX(-4px)}}
+@keyframes fj{0%,100%{transform:translateY(0) translateX(0)}33%{transform:translateY(14px) translateX(-3px)}66%{transform:translateY(-16px) translateX(5px)}}
+@keyframes fk{0%,100%{transform:translateY(0) translateX(0)}42%{transform:translateY(-18px) translateX(4px)}75%{transform:translateY(10px) translateX(-5px)}}
+@keyframes fl{0%,100%{transform:translateY(0) translateX(0)}18%{transform:translateY(20px) translateX(-2px)}60%{transform:translateY(-12px) translateX(4px)}}
+@keyframes fm{0%,100%{transform:translateY(0) translateX(0)}55%{transform:translateY(-14px) translateX(-4px)}85%{transform:translateY(18px) translateX(3px)}}
 
-  <script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
+/* Bottom strip */
+.hero-bottom{position:relative;z-index:2;display:flex;align-items:flex-end;justify-content:space-between;flex-wrap:wrap;gap:1rem;padding-top:1.5rem;border-top:1px solid rgba(14,14,14,.15);animation:fadeUp .8s 1.4s both}
+.hero-role{font-family:'DM Serif Display',serif;font-size:clamp(1.1rem,2.5vw,1.8rem);font-style:italic;color:#0e0e0e}
+.hero-tag{font-size:.7rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#aaa;display:flex;align-items:center;gap:1.2rem}
+.hero-tag span{color:#0e0e0e}
+.hero-cta{display:inline-flex;align-items:center;gap:.5rem;padding:.6rem 1.4rem;border:1px solid #0e0e0e;border-radius:100px;font-size:.72rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;transition:background .2s,color .2s}
+.hero-cta:hover{background:#0e0e0e;color:#f2efe8}
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
 
+/* ─── Marquee ─── */
+.marquee-wrap{overflow:hidden;border-top:1px solid rgba(14,14,14,.12);border-bottom:1px solid rgba(14,14,14,.12);padding:.75rem 0;background:#ece9e1}
+.marquee{display:flex;width:max-content;animation:marquee 24s linear infinite}
+.marquee-track{display:flex}
+.marquee-item{font-family:'DM Serif Display',serif;font-style:italic;font-size:1rem;color:#0e0e0e;white-space:nowrap;padding:0 2rem}
+.marquee-dot{font-style:normal;color:#aaa;padding:0 .5rem}
+@keyframes marquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+/* ─── Section Base ─── */
+section{padding:clamp(5rem,9vw,10rem) clamp(1.5rem,5vw,4rem)}
+.sec-label{font-size:.68rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:#aaa;margin-bottom:3rem;display:flex;align-items:center;gap:1rem}
+.sec-label::after{content:'';flex:1;height:1px;background:rgba(14,14,14,.12)}
+
+/* reveal */
+.rv{opacity:0;transform:translateY(24px);transition:opacity .8s cubic-bezier(.4,0,.2,1),transform .8s cubic-bezier(.4,0,.2,1)}
+.rv.in{opacity:1;transform:none}
+.d1{transition-delay:.08s}.d2{transition-delay:.16s}.d3{transition-delay:.24s}.d4{transition-delay:.32s}
+
+/* ─── About ─── */
+#about{max-width:1200px;margin:0 auto}
+.about-grid{display:grid;grid-template-columns:1fr 1fr;gap:6rem;align-items:start}
+@media(max-width:800px){.about-grid{grid-template-columns:1fr;gap:3rem}}
+.about-lead{font-family:'DM Serif Display',serif;font-size:clamp(1.3rem,2.5vw,2rem);font-weight:400;line-height:1.55;color:#0e0e0e}
+.about-lead em{font-style:italic;color:#888}
+.about-body{display:flex;flex-direction:column;gap:1.4rem}
+.about-body p{font-size:.93rem;color:#555;line-height:1.9;font-weight:300;font-family:'DM Sans',sans-serif}
+.about-body strong{color:#0e0e0e;font-weight:500}
+
+/* Career inline */
+.career-line{display:flex;flex-wrap:wrap;gap:0;margin-top:2.5rem;border-top:1px solid rgba(14,14,14,.1);padding-top:1.5rem}
+.career-item{display:flex;flex-direction:column;padding-right:2.5rem;padding-bottom:1rem}
+.ci-company{font-family:'DM Serif Display',serif;font-size:1rem;font-weight:400}
+.ci-years{font-size:.68rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#aaa;margin-top:.2rem}
+
+/* Skills — honest labelling */
+.skills-block{margin-top:2rem;display:flex;flex-direction:column;gap:1.1rem}
+.skill-group-label{font-size:.63rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:#bbb;margin-bottom:.45rem}
+.skills-row{display:flex;flex-wrap:wrap;gap:.35rem}
+.sk{font-size:.78rem;font-weight:400;font-family:'DM Sans',sans-serif;padding:.28rem .75rem;border:1px solid rgba(14,14,14,.18);border-radius:100px;color:#555;transition:.2s;cursor:default}
+.sk:hover{background:#0e0e0e;color:#f2efe8;border-color:#0e0e0e}
+/* familiarity tiers — visual only, subtle */
+.sk.solid{border-color:rgba(14,14,14,.35);color:#333}
+.sk.learning{border-style:dashed;color:#888}
+
+/* ─── Projects ─── */
+#projects{background:#0e0e0e;color:#f2efe8}
+#projects .sec-label{color:#444}
+#projects .sec-label::after{background:rgba(242,239,232,.1)}
+.proj-list{display:flex;flex-direction:column}
+.proj-row{display:grid;grid-template-columns:3rem 1fr auto;align-items:baseline;gap:2rem;padding:1.8rem 0;border-bottom:1px solid rgba(242,239,232,.07);text-decoration:none;color:#f2efe8;position:relative;overflow:hidden;transition:padding-left .3s cubic-bezier(.4,0,.2,1)}
+.proj-row::before{content:'';position:absolute;inset:0;background:rgba(242,239,232,.03);transform:translateX(-100%);transition:transform .35s cubic-bezier(.4,0,.2,1)}
+.proj-row:hover::before{transform:translateX(0)}
+.proj-row:hover{padding-left:.5rem}
+.proj-num{font-size:.68rem;font-weight:700;letter-spacing:.1em;color:#444;align-self:center}
+.proj-name-wrap{display:flex;flex-direction:column;gap:.3rem}
+.proj-name{font-family:'DM Serif Display',serif;font-size:clamp(1.3rem,3vw,2.1rem);font-weight:400;line-height:1;transition:font-style .2s}
+.proj-row:hover .proj-name{font-style:italic}
+.proj-sub{font-size:.75rem;color:#555;font-family:'DM Sans',sans-serif;letter-spacing:.03em;line-height:1.5}
+.proj-tags-inline{display:flex;gap:.5rem;flex-wrap:wrap;margin-top:.35rem}
+.pt{font-size:.63rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#444}
+.proj-meta{display:flex;flex-direction:column;align-items:flex-end;gap:.3rem}
+.proj-year{font-family:'DM Serif Display',serif;font-style:italic;font-size:1rem;color:#444;white-space:nowrap}
+.proj-link-pill{font-size:.65rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#f2efe8;border:1px solid rgba(242,239,232,.2);border-radius:100px;padding:.22rem .7rem;transition:.2s;white-space:nowrap}
+.proj-row:hover .proj-link-pill{background:#f2efe8;color:#0e0e0e}
+
+/* ─── Experience ─── */
+#experience{max-width:1200px;margin:0 auto}
+.exp-list{display:flex;flex-direction:column;gap:0}
+.exp-item{display:grid;grid-template-columns:1fr 1fr;gap:4rem;padding:2.5rem 0;border-bottom:1px solid rgba(14,14,14,.1)}
+@media(max-width:700px){.exp-item{grid-template-columns:1fr;gap:1.2rem}}
+.exp-role{font-family:'DM Serif Display',serif;font-size:clamp(1.1rem,2.2vw,1.55rem);font-weight:400;margin-bottom:.3rem}
+.exp-company{font-size:.75rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#aaa}
+.exp-date{font-family:'DM Serif Display',serif;font-style:italic;font-size:.88rem;color:#aaa;margin-top:.2rem}
+.exp-right ul{display:flex;flex-direction:column;gap:.7rem}
+.exp-right li{font-size:.87rem;color:#666;line-height:1.8;font-family:'DM Sans',sans-serif;font-weight:300;padding-left:1rem;position:relative}
+.exp-right li::before{content:'—';position:absolute;left:0;color:#bbb}
+
+/* ─── Contact ─── */
+#contact{background:#0e0e0e;color:#f2efe8}
+#contact .sec-label{color:#444}
+#contact .sec-label::after{background:rgba(242,239,232,.08)}
+.contact-big{font-family:'DM Serif Display',serif;font-size:clamp(2.5rem,7vw,7rem);font-weight:400;line-height:1;letter-spacing:-.02em;margin-bottom:1rem}
+.contact-big em{font-style:italic;color:#555}
+.contact-sub{font-family:'DM Sans',sans-serif;font-size:.9rem;color:#555;font-weight:300;line-height:1.8;max-width:50ch;margin-bottom:3rem}
+.contact-sub strong{color:#888;font-weight:400}
+.contact-links{display:flex;flex-direction:column;gap:0;max-width:680px}
+.cl{display:flex;align-items:center;justify-content:space-between;padding:1.3rem 0;border-bottom:1px solid rgba(242,239,232,.07);font-family:'DM Serif Display',serif;font-size:1rem;color:#f2efe8;transition:color .2s,padding-left .25s}
+.cl:hover{color:#aaa;padding-left:.5rem}
+.cl-label{font-size:.72rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;font-family:'Syne',sans-serif;color:#444}
+.cl-arrow{font-size:.9rem;color:#444;transition:transform .25s;margin-left:.5rem}
+.cl:hover .cl-arrow{transform:translate(4px,-4px)}
+
+/* ─── Footer ─── */
+footer{background:#0a0a0a;color:#333;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;padding:1.8rem clamp(1.5rem,5vw,4rem);font-size:.7rem;letter-spacing:.08em;text-transform:uppercase}
+footer a{color:#555;transition:color .2s}
+footer a:hover{color:#f2efe8}
+
+/* ─── Skill legend note ─── */
+.skill-legend{font-size:.65rem;color:#bbb;font-family:'DM Sans',sans-serif;margin-top:.5rem;font-style:italic}
+</style>
 </head>
-
 <body>
 
-  <!-- ======= Header ======= -->
-  <header id="header">
-    <div class="container">
+<div id="progress"></div>
+<div id="cur"></div>
+<div id="cur-txt">View →</div>
 
-      <h1><a href="index.html">Adarsh Krishna</a></h1>
-      <!-- <a href="index.html" class="mr-auto"><img src="assets/img/logo.png" alt="" class="img-fluid"></a> -->
-      <h2>I'm a passionate <span>Software Engineer</span> and an MSc Computer Sicence Student</h2>
+<!-- Nav -->
+<nav id="nav">
+  <div class="nav-logo">A<em>darsh</em> Krishna</div>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#experience">Work</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <div class="nav-right">United Kingdom</div>
+  <button class="ham" id="ham" aria-label="Menu"><span></span><span></span><span></span></button>
+</nav>
 
-      <nav id="navbar" class="navbar">
-        <ul>
-          <li><a class="nav-link active" href="#header">Home</a></li>
-          <li><a class="nav-link" href="#about">About</a></li>
-          <li><a class="nav-link" href="#resume">Resume</a></li>
-          <li><a class="nav-link" href="#services">Portfolio</a></li>
-          <li><a class="nav-link" href="#contact">Contact</a></li>
-        </ul>
-        <i class="bi bi-list mobile-nav-toggle"></i>
-      </nav><!-- .navbar -->
+<div class="mob-nav" id="mobNav">
+  <a href="#about" class="ml">About</a>
+  <a href="#projects" class="ml">Projects</a>
+  <a href="#experience" class="ml">Work</a>
+  <a href="#contact" class="ml">Contact</a>
+</div>
 
-      <div class="social-links">
-        <a href="https://github.com/Adarsh-Krish"><i class="bi bi-github"></i></a>
-        <a href="https://discordapp.com/users/Adarsh_krishna#7315"><i class="bi bi-discord"></i></a>
-        <a href="https://www.linkedin.com/in/adarshkrishna99/"><i class="bi bi-linkedin"></i></a>
+<!-- ══ HERO ══ -->
+<section id="hero">
+  <div class="hero-letters" aria-hidden="true">
+    <!-- A d a r s h  K r i s h n a — alternating roman/italic, scattered positions, independent float durations -->
+    <span class="hl ro" style="top:7%;left:3%;font-size:clamp(3.5rem,9vw,8.5rem);opacity:.9;animation:fa 6.1s ease-in-out infinite">A</span>
+    <span class="hl it" style="top:3%;left:22%;font-size:clamp(3rem,8vw,8rem);opacity:.7;animation:fb 7.3s ease-in-out infinite">d</span>
+    <span class="hl ro" style="top:20%;left:46%;font-size:clamp(3rem,8vw,8rem);opacity:.85;animation:fc 5.8s ease-in-out infinite">a</span>
+    <span class="hl it" style="top:35%;left:70%;font-size:clamp(2.5rem,7vw,7rem);opacity:.65;animation:fd 8.2s ease-in-out infinite">r</span>
+    <span class="hl ro" style="top:6%;left:76%;font-size:clamp(2.5rem,6.5vw,6.5rem);opacity:.8;animation:fe 6.7s ease-in-out infinite">s</span>
+    <span class="hl it" style="top:48%;left:10%;font-size:clamp(3rem,8vw,8rem);opacity:.7;animation:ff 7.8s ease-in-out infinite">h</span>
+    <span class="hl ro" style="top:44%;left:38%;font-size:clamp(3rem,8vw,8rem);opacity:.9;animation:fg 5.4s ease-in-out infinite">K</span>
+    <span class="hl it" style="top:57%;left:60%;font-size:clamp(2.5rem,7vw,7rem);opacity:.65;animation:fh 9.1s ease-in-out infinite">r</span>
+    <span class="hl ro" style="top:62%;left:84%;font-size:clamp(2rem,5.5vw,5.5rem);opacity:.75;animation:fi 6.5s ease-in-out infinite">i</span>
+    <span class="hl it" style="top:70%;left:24%;font-size:clamp(2.5rem,6vw,6rem);opacity:.7;animation:fj 7.2s ease-in-out infinite">sh</span>
+    <span class="hl ro" style="top:68%;left:52%;font-size:clamp(3rem,7.5vw,7.5rem);opacity:.85;animation:fk 8.6s ease-in-out infinite">n</span>
+    <span class="hl it" style="top:76%;left:74%;font-size:clamp(2.5rem,6vw,6rem);opacity:.6;animation:fl 5.9s ease-in-out infinite">a</span>
+  </div>
+
+  <div class="hero-bottom">
+    <div class="hero-role">Full-Stack Software Engineer</div>
+    <div class="hero-tag"><span>React · Node.js · MySQL</span> &nbsp;·&nbsp; UK Graduate Visa</div>
+    <a href="#contact" class="hero-cta">Let's talk →</a>
+  </div>
+</section>
+
+<!-- Marquee -->
+<div class="marquee-wrap">
+  <div class="marquee">
+    <div class="marquee-track">
+      <span class="marquee-item">Full-Stack Engineer</span><span class="marquee-item marquee-dot">·</span>
+      <span class="marquee-item">React · Node.js · MySQL</span><span class="marquee-item marquee-dot">·</span>
+      <span class="marquee-item">MSc Computer Science</span><span class="marquee-item marquee-dot">·</span>
+      <span class="marquee-item">Founding Engineer @ Care Esteem</span><span class="marquee-item marquee-dot">·</span>
+      <span class="marquee-item">Open to Sponsorship · UK</span><span class="marquee-item marquee-dot">·</span>
+      <span class="marquee-item">Genetic Algorithms · Neural Networks</span><span class="marquee-item marquee-dot">·</span>
+      <span class="marquee-item">Java · JavaScript</span><span class="marquee-item marquee-dot">·</span>
+    </div>
+    <div class="marquee-track" aria-hidden="true">
+      <span class="marquee-item">Full-Stack Engineer</span><span class="marquee-item marquee-dot">·</span>
+      <span class="marquee-item">React · Node.js · MySQL</span><span class="marquee-item marquee-dot">·</span>
+      <span class="marquee-item">MSc Computer Science</span><span class="marquee-item marquee-dot">·</span>
+      <span class="marquee-item">Founding Engineer @ Care Esteem</span><span class="marquee-item marquee-dot">·</span>
+      <span class="marquee-item">Open to Sponsorship · UK</span><span class="marquee-item marquee-dot">·</span>
+      <span class="marquee-item">Genetic Algorithms · Neural Networks</span><span class="marquee-item marquee-dot">·</span>
+      <span class="marquee-item">Java · JavaScript</span><span class="marquee-item marquee-dot">·</span>
+    </div>
+  </div>
+</div>
+
+<!-- ══ ABOUT ══ -->
+<section id="about">
+  <div class="sec-label rv">About</div>
+  <div class="about-grid">
+    <div class="rv d1">
+      <p class="about-lead">
+        I build things for the web — with <em>care for the details</em> and a preference for keeping things simple and maintainable.
+      </p>
+      <div class="career-line">
+        <div class="career-item"><span class="ci-company">TechNXT</span><span class="ci-years">2021</span></div>
+        <div class="career-item"><span class="ci-company">Care Esteem</span><span class="ci-years">2024 — Today</span></div>
+        <div class="career-item"><span class="ci-company">UH · MSc</span><span class="ci-years">2022 — 2024</span></div>
+      </div>
+    </div>
+
+    <div class="about-body rv d2">
+      <p>I'm a <strong>Full-Stack Software Engineer</strong> based in the UK. I'm currently part of the founding team at <strong>Care Esteem Ltd</strong>, a health tech startup, where I work across the frontend and backend — React.js, Node.js, and MySQL.</p>
+      <p>I hold an <strong>MSc in Advanced Computer Science (Merit)</strong> from the University of Hertfordshire, where my dissertation explored autonomous vehicle simulation using genetic algorithms and neural networks. Before that, a <strong>BSc in Computer Science</strong> from the University of Calicut.</p>
+      <p>I'm comfortable picking up new tools as the project needs. I try to be honest about where I'm still learning — there's more of that than the CV usually lets on.</p>
+
+      <div class="skills-block">
+        <div>
+          <div class="skill-group-label">Day-to-day</div>
+          <div class="skills-row">
+            <span class="sk solid">React.js</span>
+            <span class="sk solid">JavaScript</span>
+            <span class="sk solid">Node.js</span>
+            <span class="sk solid">Express</span>
+            <span class="sk solid">MySQL</span>
+            <span class="sk solid">Git</span>
+            <span class="sk solid">HTML / CSS</span>
+          </div>
+        </div>
+        <div>
+          <div class="skill-group-label">Have used / some familiarity</div>
+          <div class="skills-row">
+            <span class="sk">MongoDB</span>
+            <span class="sk">PostgreSQL</span>
+            <span class="sk">Firebase</span>
+            <span class="sk">REST APIs</span>
+            <span class="sk">Java</span>
+            <span class="sk">Python</span>
+            <span class="sk">Bootstrap</span>
+            <span class="sk">Figma</span>
+          </div>
+        </div>
+        <div>
+          <div class="skill-group-label">Exposure / still learning</div>
+          <div class="skills-row">
+            <span class="sk learning">AWS (S3, EC2)</span>
+            <span class="sk learning">CI/CD basics</span>
+            <span class="sk learning">GitHub Actions</span>
+            <span class="sk learning">Flutter / Dart</span>
+          </div>
+        </div>
+        <p class="skill-legend">Dashed border = I know enough to have a conversation, not enough to call myself proficient.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ PROJECTS ══ -->
+<section id="projects">
+  <div style="max-width:1200px;margin:0 auto">
+    <div class="sec-label rv">Projects</div>
+    <div class="proj-list">
+
+      <!-- 01 Autonomous Car -->
+      <a href="https://github.com/Adarsh-Krish/autonomousCar" target="_blank"
+         class="proj-row rv d1 proj-hover-target">
+        <div class="proj-num">01</div>
+        <div class="proj-name-wrap">
+          <div class="proj-name">Virtual Autonomous Car Simulation</div>
+          <div class="proj-sub">MSc Dissertation · University of Hertfordshire · 2024 · Ranked top 5 in cohort</div>
+          <div class="proj-tags-inline">
+            <span class="pt">JavaScript</span><span class="pt">·</span>
+            <span class="pt">Genetic Algorithms</span><span class="pt">·</span>
+            <span class="pt">Neural Networks</span><span class="pt">·</span>
+            <span class="pt">HTML5 Canvas</span>
+          </div>
+          <div style="margin-top:.6rem;font-size:.82rem;color:#666;font-family:'DM Sans',sans-serif;font-weight:300;max-width:58ch;line-height:1.7">
+            Built a vehicle simulation from scratch comparing a genetic algorithm controller against a rule-based system. Implemented the GA, the road environment, obstacle detection, and the visualisation — all without a library. It was the most technically ambitious thing I'd done at the time.
+          </div>
+        </div>
+        <div class="proj-meta">
+          <div class="proj-year">2024</div>
+          <span class="proj-link-pill">GitHub →</span>
+        </div>
+      </a>
+
+      <!-- 02 WFC Booking -->
+      <a href="https://github.com/Adarsh-Krish/WeekendFitnessClub" target="_blank"
+         class="proj-row rv d2 proj-hover-target">
+        <div class="proj-num">02</div>
+        <div class="proj-name-wrap">
+          <div class="proj-name">Weekend Fitness Club Booking System</div>
+          <div class="proj-sub">University Coursework · Java · OOP · 2023</div>
+          <div class="proj-tags-inline">
+            <span class="pt">Java</span><span class="pt">·</span>
+            <span class="pt">OOP</span><span class="pt">·</span>
+            <span class="pt">CLI</span><span class="pt">·</span>
+            <span class="pt">In-memory data</span>
+          </div>
+          <div style="margin-top:.6rem;font-size:.82rem;color:#666;font-family:'DM Sans',sans-serif;font-weight:300;max-width:58ch;line-height:1.7">
+            Command-line booking system for a fitness club — users can browse lessons, make bookings, update or cancel them, mark attendance, and rate sessions. Generates basic monthly reports. Pure Java, no framework, no external database.
+          </div>
+        </div>
+        <div class="proj-meta">
+          <div class="proj-year">2023</div>
+          <span class="proj-link-pill">GitHub →</span>
+        </div>
+      </a>
+
+      <!-- 03 Client Portfolio -->
+      <a href="https://github.com/Adarsh-Krish/portfolio_project_001" target="_blank"
+         class="proj-row rv d3 proj-hover-target">
+        <div class="proj-num">03</div>
+        <div class="proj-name-wrap">
+          <div class="proj-name">Client Portfolio Website</div>
+          <div class="proj-sub">Freelance · TechNXT · 2021 · Delivered for a real client</div>
+          <div class="proj-tags-inline">
+            <span class="pt">HTML5</span><span class="pt">·</span>
+            <span class="pt">CSS3</span><span class="pt">·</span>
+            <span class="pt">JavaScript</span><span class="pt">·</span>
+            <span class="pt">Bootstrap</span>
+          </div>
+          <div style="margin-top:.6rem;font-size:.82rem;color:#666;font-family:'DM Sans',sans-serif;font-weight:300;max-width:58ch;line-height:1.7">
+            One of the first professional sites I shipped — a multi-page portfolio for a client while working at TechNXT. Gallery, contact page, social links, responsive layout. Simple, but it was a real brief with a real person waiting on it.
+          </div>
+        </div>
+        <div class="proj-meta">
+          <div class="proj-year">2021</div>
+          <span class="proj-link-pill">GitHub →</span>
+        </div>
+      </a>
+
+    </div>
+  </div>
+</section>
+
+<!-- ══ EXPERIENCE ══ -->
+<section id="experience">
+  <div style="max-width:1200px;margin:0 auto">
+    <div class="sec-label rv">Work</div>
+    <div class="exp-list">
+
+      <div class="exp-item rv d1">
+        <div class="exp-left">
+          <div class="exp-role">Founding Software Engineer</div>
+          <div class="exp-company">Care Esteem Ltd · Health Tech · UK</div>
+          <div class="exp-date">Nov 2024 — Present</div>
+        </div>
+        <div class="exp-right">
+          <ul>
+            <li>Part of the founding engineering team building the company's core platform. Working full-stack — React.js on the frontend, Node.js and MySQL on the backend.</li>
+            <li>Involved in building features from scratch: UI components, API endpoints, and database queries. Real product, real users.</li>
+            <li>Working within Agile/Scrum cycles — picking up tickets, participating in sprint planning, shipping regularly.</li>
+            <li>Using AI dev tools (Claude Code, GitHub Copilot) as part of everyday workflow — they help me move faster and catch things I'd miss.</li>
+            <li>Still learning a lot on the job — the startup environment means wearing multiple hats and figuring things out as you go.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="exp-item rv d2">
+        <div class="exp-left">
+          <div class="exp-role">Co-Founder &amp; Developer</div>
+          <div class="exp-company">TechNXT · Kerala, India</div>
+          <div class="exp-date">Jan 2021 — Oct 2021</div>
+        </div>
+        <div class="exp-right">
+          <ul>
+            <li>Built and delivered websites for small business clients — mostly HTML, CSS, JavaScript, Bootstrap. Small projects, but real clients with real deadlines.</li>
+            <li>Handled everything from scoping to delivery independently. Good for learning how to communicate with non-technical people.</li>
+          </ul>
+        </div>
       </div>
 
     </div>
-  </header><!-- End Header -->
 
-  <!-- ======= About Section ======= -->
-  <section id="about" class="about">
-
-    <!-- ======= About Me ======= -->
-    <div class="about-me container">
-
-      <div class="section-title">
-        <h2>About Me</h2>
-        <p>A little bit about me</p>
-      </div>
-
-      <div class="row">
-        <div class="col-lg-4" data-aos="fade-right">
-          <img src="assets/img/me.png" class="img-fluid" alt="">
-        </div>
-        <div class="col-lg-8 pt-4 pt-lg-0 content" data-aos="fade-left">
-          <h3>Profile Summary </h3>
-          <!-- <p class="fst-italic">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
-            dolore
-            magna aliqua.
-          </p>
-          <div class="row">
-            <div class="col-lg-6">
-              <ul>
-                <li><i class="bi bi-chevron-right"></i> <strong>Birthday:</strong> <span>1 May 1995</span></li>
-                <li><i class="bi bi-chevron-right"></i> <strong>Website:</strong> <span>www.example.com</span></li>
-                <li><i class="bi bi-chevron-right"></i> <strong>Phone:</strong> <span>+123 456 7890</span></li>
-                <li><i class="bi bi-chevron-right"></i> <strong>City:</strong> <span>New York, USA</span></li>
-              </ul>
-            </div>
-            <div class="col-lg-6">
-              <ul>
-                <li><i class="bi bi-chevron-right"></i> <strong>Age:</strong> <span>30</span></li>
-                <li><i class="bi bi-chevron-right"></i> <strong>Degree:</strong> <span>Master</span></li>
-                <li><i class="bi bi-chevron-right"></i> <strong>PhEmailone:</strong> <span>email@example.com</span></li>
-                <li><i class="bi bi-chevron-right"></i> <strong>Freelance:</strong> <span>Available</span></li>
-              </ul>
-            </div>
+    <!-- Education -->
+    <div style="margin-top:4rem;padding-top:3rem;border-top:1px solid rgba(14,14,14,.1)">
+      <div class="sec-label rv" style="margin-bottom:2rem">Education</div>
+      <div class="exp-list">
+        <div class="exp-item rv d1">
+          <div class="exp-left">
+            <div class="exp-role">MSc Advanced Computer Science</div>
+            <div class="exp-company">University of Hertfordshire · UK</div>
+            <div class="exp-date">Oct 2022 — Oct 2024 · Merit (77.53%)</div>
           </div>
-          <p>
-            Officiis eligendi itaque labore et dolorum mollitia officiis optio vero. Quisquam sunt adipisci omnis et ut.
-            Nulla accusantium dolor incidunt officia tempore. Et eius omnis.
-            Cupiditate ut dicta maxime officiis quidem quia. Sed et consectetur qui quia repellendus itaque neque.
-            Aliquid amet quidem ut quaerat cupiditate. Ab et eum qui repellendus omnis culpa magni laudantium dolores.
-          </p> -->
-
-
-          <p>
-
-            As a highly motivated and enthusiastic software engineer, I have always been passionate about pursuing my
-            career in the field of computer science. My journey in this domain began when I completed my higher
-            secondary education, specializing in Physics, Chemistry, and Maths, along with Computer Science. I then went
-            on to pursue a Bachelor's degree in Computer Science from the University of Calicut, where I graduated with
-            First Class and was the class topper. My academic excellence in the field of computer science has fueled my
-            desire to continue learning and growing in this field.<br><br>
-
-            I am currently pursuing an MSc in Advanced Computer Science at the University of Hertfordshire, with a
-            focused mindset on building a strong academic and practical profile to ultimately become a successful
-            software engineer in the future. My education has equipped me with the knowledge and skills required to
-            succeed as a software engineer. I have a
-            range of technical skills, including programming in HTML, CSS, JavaScript, Bootstrap, Flutter, Java,
-            Android, and MySQL. Additionally, I have a basic appreciation of Python, R language, C++, React
-            JS, Node JS, MongoDB, JUnit Testing, and C programming.<br><br>
-
-            Apart from my academic and professional pursuits, I enjoy various hobbies such as drawing, playing video
-            games, swimming, playing the guitar, and crafting. These hobbies allow me to take a break from my work and
-            engage in activities that I am passionate about. I believe that having a well-rounded life outside of work
-            is essential for maintaining a healthy work-life balance.<br><br>
-          </p>
-
-
-
-
-        </div>
-      </div>
-
-    </div><!-- End About Me -->
-
-    <!-- ======= Counts ======= -->
-    <div class="counts container">
-
-      <div class="row">
-
-        <div class="col-lg-4 col-md-6">
-          <div class="count-box">
-            <i class="bi bi-emoji-smile"></i>
-            <span data-purecounter-start="0" data-purecounter-end="10" data-purecounter-duration="1"
-              class="purecounter"></span>
-            <p>Happy Clients</p>
-          </div>
-        </div>
-
-        <div class="col-lg-4 col-md-6 mt-5 mt-md-0">
-          <div class="count-box">
-            <i class="bi bi-journal-richtext"></i>
-            <span data-purecounter-start="0" data-purecounter-end="28" data-purecounter-duration="1"
-              class="purecounter"></span>
-            <p>Projects</p>
-          </div>
-        </div>
-
-        <div class="col-lg-4 col-md-6 mt-5 mt-lg-0">
-          <div class="count-box">
-            <i class="bi bi-award"></i>
-            <span data-purecounter-start="0" data-purecounter-end="8" data-purecounter-duration="1"
-              class="purecounter"></span>
-            <p>Awards</p>
-          </div>
-        </div>
-
-      </div>
-
-    </div><!-- End Counts -->
-
-    <!-- ======= Skills  ======= -->
-    <!-- <div class="skills container">
-
-      <div class="section-title">
-        <h2>Skills & Tools</h2>
-      </div>
-
-      <div class="row skills-content">
-
-        <div class="col-lg-6">
-
-          <div class="progress">
-            <span class="skill">HTML <i class="val">100%</i></span>
-            <div class="progress-bar-wrap">
-              <div class="progress-bar" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">
-              </div>
-            </div>
-          </div>
-
-          <div class="progress">
-            <span class="skill">CSS <i class="val">90%</i></span>
-            <div class="progress-bar-wrap">
-              <div class="progress-bar" role="progressbar" aria-valuenow="90" aria-valuemin="0" aria-valuemax="100">
-              </div>
-            </div>
-          </div>
-
-          <div class="progress">
-            <span class="skill">JavaScript <i class="val">75%</i></span>
-            <div class="progress-bar-wrap">
-              <div class="progress-bar" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100">
-              </div>
-            </div>
-          </div>
-
-        </div>
-
-        <div class="col-lg-6">
-
-          <div class="progress">
-            <span class="skill">PHP <i class="val">80%</i></span>
-            <div class="progress-bar-wrap">
-              <div class="progress-bar" role="progressbar" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100">
-              </div>
-            </div>
-          </div>
-
-          <div class="progress">
-            <span class="skill">WordPress/CMS <i class="val">90%</i></span>
-            <div class="progress-bar-wrap">
-              <div class="progress-bar" role="progressbar" aria-valuenow="90" aria-valuemin="0" aria-valuemax="100">
-              </div>
-            </div>
-          </div>
-
-          <div class="progress">
-            <span class="skill">Photoshop <i class="val">55%</i></span>
-            <div class="progress-bar-wrap">
-              <div class="progress-bar" role="progressbar" aria-valuenow="55" aria-valuemin="0" aria-valuemax="100">
-              </div>
-            </div>
-          </div>
-
-        </div>
-
-      </div>
-
-    </div>End Skills -->
-
-    <div class="interests container">
-
-      <div class="section-title pb-3">
-        <h2>Skills & Tools</h2>
-        <span>I utilize a variety of skills, tools, and technologies to transform your ideas into tangible
-          products.</span>
-      </div>
-
-      <div class="row">
-        <div class="col-lg-3 col-md-4">
-          <div class="icon-box">
-            <i class="bx bxl-html5" style="color: #ffbb2c;"></i>
-            <h3>HTML5</h3>
-          </div>
-        </div>
-        <div class="col-lg-3 col-md-4 mt-4 mt-md-0">
-          <div class="icon-box">
-            <i class="bx bxl-css3" style="color: #5578ff;"></i>
-            <h3>CSS3</h3>
-          </div>
-        </div>
-        <div class="col-lg-3 col-md-4 mt-4 mt-md-0">
-          <div class="icon-box">
-            <i class="bx bxl-javascript" style="color: #e80368;"></i>
-            <h3>JavaScript</h3>
-          </div>
-        </div>
-        <div class="col-lg-3 col-md-4 mt-4 mt-lg-0">
-          <div class="icon-box">
-            <i class="bx bxl-bootstrap" style="color: #e361ff;"></i>
-            <h3>Bootstrap</h3>
-          </div>
-        </div>
-        <div class="col-lg-3 col-md-4 mt-4">
-          <div class="icon-box">
-            <i class="bx bxl-flutter" style="color: #47aeff;"></i>
-            <h3>Flutter</h3>
-          </div>
-        </div>
-        <div class="col-lg-3 col-md-4 mt-4">
-          <div class="icon-box">
-            <i class="bx bxl-firebase" style="color: #ffa76e;"></i>
-            <h3>Firebase</h3>
-          </div>
-        </div>
-        <div class="col-lg-3 col-md-4 mt-4">
-          <div class="icon-box">
-            <i class="bx bxl-java" style="color: #11dbcf;"></i>
-            <h3>Java</h3>
-          </div>
-        </div>
-        <div class="col-lg-3 col-md-4 mt-4">
-          <div class="icon-box">
-            <i class="bx bxl-android" style="color: #ff8a8a;"></i>
-            <h3>Android</h3>
-          </div>
-        </div>
-        <div class="col-lg-3 col-md-4 mt-4">
-          <div class="icon-box">
-            <i class="bx bxl-react" style="color: #b2904f;"></i>
-            <h3>React JS</h3>
-          </div>
-        </div>
-        <div class="col-lg-3 col-md-4 mt-4">
-          <div class="icon-box">
-            <i class="bx bxl-mongodb" style="color: #b20969;"></i>
-            <h3>MongoDB</h3>
-          </div>
-        </div>
-        <div class="col-lg-3 col-md-4 mt-4">
-          <div class="icon-box">
-            <i class="bx bxl-python" style="color: #ff5828;"></i>
-            <h3>Python</h3>
-          </div>
-        </div>
-        <div class="col-lg-3 col-md-4 mt-4">
-          <div class="icon-box">
-            <i class="bx bxl-visual-studio" style="color: #29cc61;"></i>
-            <h3>VSCode</h3>
-          </div>
-        </div>
-        <div class="col-lg-3 col-md-4 mt-4">
-          <div class="icon-box">
-            <i class="bx bxl-figma" style="color: #298ecc;"></i>
-            <h3>Figma</h3>
-          </div>
-        </div>
-        <div class="col-lg-3 col-md-4 mt-4">
-          <div class="icon-box">
-            <i class="bx bxl-adobe" style="color: #751475;"></i>
-            <h3>Adobe Photoshop</h3>
-          </div>
-        </div>
-        <div class="col-lg-3 col-md-4 mt-4">
-          <div class="icon-box">
-            <i class="bx bxl-trello" style="color: #82480b;"></i>
-            <h3>Trello</h3>
-          </div>
-        </div>
-        <div class="col-lg-3 col-md-4 mt-4">
-          <div class="icon-box">
-            <i class="bx bx-notepad" style="color: #3ffffc;"></i>
-            <h3>Kanban</h3>
-          </div>
-        </div>
-        <div class="col-lg-3 col-md-4 mt-4">
-          <div class="icon-box">
-            <i class="bx bxl-git" style="color: #fdc2c2;"></i>
-            <h3>Git</h3>
-          </div>
-        </div>
-        <div class="col-lg-3 col-md-4 mt-4">
-          <div class="icon-box">
-            <i class="bx bxl-github" style="color: #64721f;"></i>
-            <h3>GitHub</h3>
-          </div>
-        </div>
-        <div class="col-lg-3 col-md-4 mt-4">
-          <div class="icon-box">
-            <i class="bx bx-chip" style="color: #00ff59;"></i>
-            <h3>Unreal Engine 5</h3>
-          </div>
-        </div>
-        <div class="col-lg-3 col-md-4 mt-4">
-          <div class="icon-box">
-            <i class="bx bxl-blender" style="color: #997dff;"></i>
-            <h3>Blender</h3>
-          </div>
-        </div>
-        <div class="col-lg-3 col-md-4 mt-4">
-          <div class="icon-box">
-            <i class="bx bxl-adobe" style="color: #34e7e7;"></i>
-            <h3>Adobe Premier Pro</h3>
-          </div>
-        </div>
-      </div>
-
-
-    </div><!-- End Interests -->
-
-    <!-- ======= Testimonials ======= -->
-
-
-  </section><!-- End About Section -->
-
-  <!-- ======= Resume Section ======= -->
-  <section id="resume" class="resume">
-    <div class="container">
-
-      <div class="section-title">
-        <h2>Resume</h2>
-        <p>Check My Resume</p>
-      </div>
-
-      <div class="row">
-        <div class="col-lg-6">
-          <!-- <h3 class="resume-title">Sumary</h3>
-          <div class="resume-item pb-0">
-            <h4>Alice Barkley</h4>
-            <p><em>Innovative and deadline-driven Graphic Designer with 3+ years of experience designing and developing
-                user-centered digital/print marketing material from initial concept to final, polished deliverable.</em>
-            </p>
-            <p>
+          <div class="exp-right">
             <ul>
-              <li>Portland par 127,Orlando, FL</li>
-              <li>(123) 456-7891</li>
-              <li>alice.barkley@example.com</li>
+              <li>Dissertation: Virtual Autonomous Car Simulation — genetic algorithms vs rule-based control. Scored 71%. Ranked in the top 5 of the MSc cohort.</li>
+              <li>Modules included Computational Algorithms and Paradigms, and Measures and Models for Software Engineering.</li>
             </ul>
-            </p>
-          </div> -->
-
-          <h3 class="resume-title">Education</h3>
-          <div class="resume-item">
-            <h4>MSc in Advanced Computer Science</h4>
-            <h5>2022 - Present</h5>
-            <p><em>University of Hertfordshire, Hatfield, UK</em></p>
-            <p>Courses: Measures and Models of Software Engineering, Programming for Software Engineers, Team Research
-              and Development Project, Legal and Ethical Practice Exercise, Computational Algorithms and Paradigms</p>
-          </div>
-          <div class="resume-item">
-            <h4>BSc in Computer Science (Graduation)</h4>
-            <h5>2018 - 2021</h5>
-            <p><em>University of Calicut, Kerala, India</em></p>
-            <p>Graduated with First Class and was the class topper<br>
-              Elected as the class president<br>
-              Achieved a total CGPA: 3.45 on 5.0 (First Class)
-            </p>
-          </div>
-          <div class="resume-item">
-            <h4>Higher Secondary Education (A level equivalent)</h4>
-            <h5>2016 - 2018</h5>
-            <p><em>St. Joseph’s Higher Secondary School, Kerala, India</em></p>
-            <p>Specialised in Physics, Chemistry, and Maths with Computer Science<br>
-              Nominated as the Best Club Performer at Personality Development Club, Thamarassery for the Academic Year
-              2017‑18<br>
-              Achieved a total of 84.75%
-            </p>
           </div>
         </div>
-        <div class="col-lg-6">
-          <h3 class="resume-title">Professional Experience</h3>
-          <div class="resume-item">
-            <h4>Software Developer Intern</h4>
-            <h5>Dec 2021 - June 2022</h5>
-            <p><em>Arvin Technologies, Kerala, India </em></p>
-            <p>
+        <div class="exp-item rv d2">
+          <div class="exp-left">
+            <div class="exp-role">BSc Computer Science</div>
+            <div class="exp-company">University of Calicut · Kerala, India</div>
+            <div class="exp-date">2018 — 2021</div>
+          </div>
+          <div class="exp-right">
             <ul>
-              <li>Assisted in the development of HTML, CSS, and JavaScript webpages, collaborating with the development
-                team to ensure timely delivery of
-                projects</li>
-              <li>Utilized Bootstrap to make webpages responsive, resulting in increased user engagement and
-                satisfaction
-              </li>
-              <li>Helped develop mobile applications using Flutter and Firebase, resulting in a streamlined and
-                user‑friendly mobile experience.</li>
-              <li>Collaborated with cross‑functional teams to identify and solve technical issues, ensuring timely and
-                effective resolution.</li>
-              <li>Tested and debugged web and mobile applications, ensuring high‑quality and error‑free products.</li>
+              <li>Final Year Project: Angel Eyes — an assistive app for visually impaired users. Android app with voice-guided object detection, paired with a React.js web admin panel. Led a team of 4. Scored 96.6%.</li>
             </ul>
-            </p>
-          </div>
-          <div class="resume-item">
-            <h4>Freelance Software Developer</h4>
-            <h5>Jan 2021 - Oct 2021</h5>
-            <p><em>TechNXT, Kerala, India</em></p>
-            <p>
-            <ul>
-              <li>Collaborated with team to analyse client requirements and design projects, resulting in successful
-                debugging of code errors.</li>
-              <li>Created User Interface for Web projects within tight deadlines; praised by clients for timely
-                delivery.</li>
-              <li>Developed UI from scratch and template to achieve project objectives; contributed towards a 20%
-                increase in user satisfaction scores</li>
-            </ul>
-            </p>
-          </div>
-        </div>
-        <div class="col-lg-6">
-          <h3 class="resume-title">University Projects</h3>
-          <div class="resume-item">
-            <h4>Angel Eyes</h4>
-            <p><em>University of Calicut </em></p>
-            <p>
-            <ul>
-              <li>Conceived and built Angel Eyes, an app to aid the visually impaired with OCR, object identification
-                and familiar face detection features</li>
-              <li>Oversaw a team of 4 students in the successful completion of the project with a 96.6% grade score.
-              </li>
-              <li>Deployed application on 5 devices for real‑time testing and evaluation; improved accuracy by 30%.</li>
-            </ul>
-            </p>
           </div>
         </div>
       </div>
-
-    </div>
-  </section><!-- End Resume Section -->
-
-  <!-- ======= Services Section ======= -->
-  <section id="services" class="services">
-    <div class="container">
-
-      <div class="section-title">
-        <h2>Portfolio</h2>
-        <p>My Work</p>
-      </div>
-
-      <div class="row">
-        <div class="col-lg-4 col-md-6 d-flex align-items-stretch">
-          <a href="https://github.com/Adarsh-Krish/portfolio_project_001">
-            <div class="icon-box">
-              <div class="icon"><i class="bx bxl-dribbble"></i></div>
-              <h4><a href="">Portfolio Project</a></h4>
-              <p>My first web project with TechNXT for our client, where I managed the UI section.</p>
-          </a>
-        </div>
-      </div>
-
-      <div class="col-lg-4 col-md-6 d-flex align-items-stretch">
-        <a href="https://github.com/Adarsh-Krish/WeekendFitnessClub">
-          <div class="icon-box">
-            <div class="icon"><i class="bx bx-award"></i></div>
-            <h4><a href="">Booking System</a></h4>
-            <p>A Java-based Gym class booking system with predefined database.</p>
-          </div>
-        </a>
-      </div>
-
-      <div class="col-lg-4 col-md-6 d-flex align-items-stretch">
-        <a href="https://github.com/Adarsh-Krish/MERN_Blog_Website">
-          <div class="icon-box">
-            <div class="icon"><i class="bx bx-award"></i></div>
-            <h4><a href="">Blog Website</a></h4>
-            <p>JavaScript (MERN) based website which can be used to display blogs.</p>
-          </div>
-        </a>
-      </div>
-
-      <div class="col-lg-4 col-md-6 d-flex align-items-stretch mt-4">
-        <div class="icon-box">
-          <div class="icon"><i class="bx bx-world"></i></div>
-          <h4><a href="">Nemo Enim</a></h4>
-          <p>At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis</p>
-        </div>
-      </div>
-
-      <div class="col-lg-4 col-md-6 d-flex align-items-stretch mt-4">
-        <div class="icon-box">
-          <div class="icon"><i class="bx bx-slideshow"></i></div>
-          <h4><a href="">Dele cardo</a></h4>
-          <p>Quis consequatur saepe eligendi voluptatem consequatur dolor consequuntur</p>
-        </div>
-      </div>
-
-      <div class="col-lg-4 col-md-6 d-flex align-items-stretch mt-4">
-        <div class="icon-box">
-          <div class="icon"><i class="bx bx-arch"></i></div>
-          <h4><a href="">Divera don</a></h4>
-          <p>Modi nostrum vel laborum. Porro fugit error sit minus sapiente sit aspernatur</p>
-        </div>
-      </div>
-
     </div>
 
+  </div>
+</section>
+
+<!-- ══ CONTACT ══ -->
+<section id="contact">
+  <div style="max-width:900px;margin:0 auto">
+    <div class="sec-label rv">Contact</div>
+    <div class="contact-big rv d1">
+      Let's<br/><em>talk</em>
     </div>
-  </section><!-- End Services Section -->
-
-  <!-- ======= Contact Section ======= -->
-  <section id="contact" class="contact">
-    <div class="container">
-
-      <div class="section-title">
-        <h2>Contact</h2>
-        <p>Contact Me</p>
-      </div>
-
-      <div class="row mt-2">
-        <div class="col-md-6 mt-4 d-flex align-items-stretch">
-          <div class="info-box">
-            <i class="bx bx-share-alt"></i>
-            <h3>Social Profiles</h3>
-            <div class="social-links">
-              <a href="https://github.com/Adarsh-Krish"><i class="bi bi-github"></i></a>
-              <a href="https://discordapp.com/users/Adarsh_krishna#7315"><i class="bi bi-discord"></i></a>
-              <a href="https://www.linkedin.com/in/adarshkrishna99/"><i class="bi bi-linkedin"></i></a>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-md-6 mt-4 d-flex align-items-stretch">
-          <div class="info-box">
-            <i class="bx bx-envelope"></i>
-            <h3>Email Me</h3>
-            <p>adarshkrishna099@gmail.com</p>
-          </div>
-        </div>
-      </div>
-
-      <form action="forms/contact.php" method="post" role="form" class="php-email-form mt-4">
-        <div class="row">
-          <div class="col-md-6 form-group">
-            <input type="text" name="name" class="form-control" id="name" placeholder="Your Name" required>
-          </div>
-          <div class="col-md-6 form-group mt-3 mt-md-0">
-            <input type="email" class="form-control" name="email" id="email" placeholder="Your Email" required>
-          </div>
-        </div>
-        <div class="form-group mt-3">
-          <input type="text" class="form-control" name="subject" id="subject" placeholder="Subject" required>
-        </div>
-        <div class="form-group mt-3">
-          <textarea class="form-control" name="message" rows="5" placeholder="Message" required></textarea>
-        </div>
-        <div class="my-3">
-          <div class="loading">Loading</div>
-          <div class="error-message"></div>
-          <div class="sent-message">Your message has been sent. Thank you!</div>
-        </div>
-        <div class="text-center"><button type="submit">Send Message</button></div>
-      </form>
-
+    <p class="contact-sub rv d2">
+      I'm looking for <strong>Skilled Worker sponsorship roles</strong> in the UK — full-stack, frontend, or backend. If you have something that might be a fit, or just want to have a chat, reach out.
+    </p>
+    <div class="contact-links rv d3">
+      <a href="mailto:adarshkrishna099@gmail.com" class="cl">
+        <span>adarshkrishna099@gmail.com</span>
+        <span style="display:flex;align-items:center;gap:.3rem"><span class="cl-label">Email</span><span class="cl-arrow">↗</span></span>
+      </a>
+      <a href="https://linkedin.com/in/adarshkrishna99" target="_blank" class="cl">
+        <span>linkedin.com/in/adarshkrishna99</span>
+        <span style="display:flex;align-items:center;gap:.3rem"><span class="cl-label">LinkedIn</span><span class="cl-arrow">↗</span></span>
+      </a>
+      <a href="https://github.com/Adarsh-Krish" target="_blank" class="cl">
+        <span>github.com/Adarsh-Krish</span>
+        <span style="display:flex;align-items:center;gap:.3rem"><span class="cl-label">GitHub</span><span class="cl-arrow">↗</span></span>
+      </a>
     </div>
-  </section><!-- End Contact Section -->
+  </div>
+</section>
 
+<footer>
+  <span>© 2025 Adarsh Krishna</span>
+  <span>Full-Stack Engineer · UK</span>
+  <a href="#hero">Back to top ↑</a>
+</footer>
 
-  <!-- Vendor JS Files -->
-  <script src="assets/vendor/purecounter/purecounter_vanilla.js"></script>
-  <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-  <script src="assets/vendor/glightbox/js/glightbox.min.js"></script>
-  <script src="assets/vendor/isotope-layout/isotope.pkgd.min.js"></script>
-  <script src="assets/vendor/swiper/swiper-bundle.min.js"></script>
-  <script src="assets/vendor/waypoints/noframework.waypoints.js"></script>
-  <script src="assets/vendor/php-email-form/validate.js"></script>
+<script>
+/* ─── Progress ─── */
+window.addEventListener('scroll',()=>{
+  const s=document.documentElement;
+  document.getElementById('progress').style.width=(s.scrollTop/(s.scrollHeight-s.clientHeight)*100)+'%';
+});
 
-  <script src="assets/js/main.js"></script>
+/* ─── Cursor ─── */
+const cur=document.getElementById('cur'),curTxt=document.getElementById('cur-txt');
+let mx=0,my=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cur.style.left=mx+'px';cur.style.top=my+'px';curTxt.style.left=mx+'px';curTxt.style.top=my+'px';});
+document.querySelectorAll('.proj-hover-target').forEach(el=>{
+  el.addEventListener('mouseenter',()=>document.body.classList.add('hov-proj'));
+  el.addEventListener('mouseleave',()=>document.body.classList.remove('hov-proj'));
+});
+document.querySelectorAll('a:not(.proj-hover-target),button,.sk').forEach(el=>{
+  el.addEventListener('mouseenter',()=>document.body.classList.add('hov-link'));
+  el.addEventListener('mouseleave',()=>document.body.classList.remove('hov-link'));
+});
 
+/* ─── Floating Letters replaced with CSS ─── */
+
+/* ─── Nav hamburger ─── */
+const ham=document.getElementById('ham'),mob=document.getElementById('mobNav');
+ham.addEventListener('click',()=>{
+  mob.classList.toggle('open');
+  const s=ham.querySelectorAll('span');
+  if(mob.classList.contains('open')){s[0].style.transform='rotate(45deg) translate(4px,4px)';s[1].style.opacity='0';s[2].style.transform='rotate(-45deg) translate(4px,-4px)';}
+  else s.forEach(x=>{x.style.transform='';x.style.opacity='';});
+});
+document.querySelectorAll('.ml').forEach(a=>a.addEventListener('click',()=>{
+  mob.classList.remove('open');
+  ham.querySelectorAll('span').forEach(x=>{x.style.transform='';x.style.opacity='';});
+}));
+
+/* ─── Scroll reveal ─── */
+const obs=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('in');}),{threshold:.08});
+document.querySelectorAll('.rv').forEach(el=>obs.observe(el));
+
+/* ─── Smooth scroll ─── */
+document.querySelectorAll('a[href^="#"]').forEach(a=>a.addEventListener('click',e=>{
+  const t=document.querySelector(a.getAttribute('href'));
+  if(t){e.preventDefault();t.scrollIntoView({behavior:'smooth',block:'start'});}
+}));
+</script>
 </body>
-
 </html>
